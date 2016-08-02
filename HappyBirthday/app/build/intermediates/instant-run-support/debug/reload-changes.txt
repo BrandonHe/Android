@@ -1,0 +1,10 @@
+CHANGED,/Users/brandon/AndroidStudioProjects/HappyBirthday/app/build/intermediates/transforms/instantRun/debug/folders/4000/5/enhanced/com/example/brandon/happybirthday/R$id$override.class
+CHANGED,/Users/brandon/AndroidStudioProjects/HappyBirthday/app/build/intermediates/transforms/instantRun/debug/folders/4000/5/enhanced/com/example/brandon/happybirthday/R$layout$override.class
+CHANGED,/Users/brandon/AndroidStudioProjects/HappyBirthday/app/build/intermediates/transforms/instantRun/debug/folders/4000/5/enhanced/com/example/brandon/happybirthday/R$mipmap$override.class
+CHANGED,/Users/brandon/AndroidStudioProjects/HappyBirthday/app/build/intermediates/transforms/instantRun/debug/folders/4000/5/enhanced/com/example/brandon/happybirthday/R$style$override.class
+CHANGED,/Users/brandon/AndroidStudioProjects/HappyBirthday/app/build/intermediates/transforms/instantRun/debug/folders/4000/5/enhanced/com/example/brandon/happybirthday/R$string$override.class
+CHANGED,/Users/brandon/AndroidStudioProjects/HappyBirthday/app/build/intermediates/transforms/instantRun/debug/folders/4000/5/enhanced/com/example/brandon/happybirthday/R$integer$override.class
+CHANGED,/Users/brandon/AndroidStudioProjects/HappyBirthday/app/build/intermediates/transforms/instantRun/debug/folders/4000/5/enhanced/com/android/tools/fd/runtime/AppPatchesLoaderImpl.class
+CHANGED,/Users/brandon/AndroidStudioProjects/HappyBirthday/app/build/intermediates/transforms/instantRun/debug/folders/4000/5/enhanced/com/example/brandon/happybirthday/R$styleable$override.class
+CHANGED,/Users/brandon/AndroidStudioProjects/HappyBirthday/app/build/intermediates/transforms/instantRun/debug/folders/4000/5/enhanced/android/support/v7/appcompat/R$id$override.class
+CHANGED,/Users/brandon/AndroidStudioProjects/HappyBirthday/app/build/intermediates/transforms/instantRun/debug/folders/4000/5/enhanced/com/example/brandon/happybirthday/R$override.class
