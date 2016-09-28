@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<items version="2" >
+
+    <item
+        jar="/Users/brandon/AndroidStudioProjects/JustJava/app/build/intermediates/incremental-runtime-classes/debug/instant-run.jar"
+        jumboMode="true"
+        revision="23.0.3"
+        sha1="9c6ec133c48a783994bb9853e765bc408dd33417">
+        <dex dex="/Users/brandon/AndroidStudioProjects/JustJava/app/build/intermediates/pre-dexed/debug/instant-run_bf61bb560836d114cd0189c5369127e9dc922dfa.jar" />
+    </item>
+    <item
+        jar="/Users/brandon/AndroidStudioProjects/JustJava/app/build/intermediates/exploded-aar/com.android.support/support-vector-drawable/23.4.0/jars/classes.jar"
+        jumboMode="true"
+        revision="23.0.3"
+        sha1="c2c594cace5d83a3227b2b6e658ecbfd586d3ed9">
+        <dex dex="/Users/brandon/AndroidStudioProjects/JustJava/app/build/intermediates/pre-dexed/debug/com.android.support-support-vector-drawable-23.4.0_b3a9597d3fcc8dab38680c2a1a86650434e2b2b7.jar" />
+    </item>
+    <item
+        jar="/Users/brandon/AndroidStudioProjects/JustJava/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.4.0/jars/classes.jar"
+        jumboMode="true"
+        revision="23.0.3"
+        sha1="548f06de403a9409f00554b3ee12a9fdea0e236c">
+        <dex dex="/Users/brandon/AndroidStudioProjects/JustJava/app/build/intermediates/pre-dexed/debug/com.android.support-appcompat-v7-23.4.0_81434870b3841d95d9e340db23f40437e6f3c68d.jar" />
+    </item>
+    <item
+        jar="/Users/brandon/Library/Android/sdk/extras/android/m2repository/com/android/support/support-annotations/23.4.0/support-annotations-23.4.0.jar"
+        jumboMode="true"
+        revision="23.0.3"
+        sha1="ffbe55fdb2bb456b1485831706a9eac3300bb6b8">
+        <dex dex="/Users/brandon/AndroidStudioProjects/JustJava/app/build/intermediates/pre-dexed/debug/support-annotations-23.4.0_f7ee935ad04b56f74cb652a3fb44674db38b1a76.jar" />
+    </item>
+    <item
+        jar="/Users/brandon/AndroidStudioProjects/JustJava/app/build/intermediates/exploded-aar/com.android.support/support-v4/23.4.0/jars/libs/internal_impl-23.4.0.jar"
+        jumboMode="true"
+        revision="23.0.3"
+        sha1="ea3c07504d2c8f4b13aa17c45c1b68ed9c1c3674">
+        <dex dex="/Users/brandon/AndroidStudioProjects/JustJava/app/build/intermediates/pre-dexed/debug/internal_impl-23.4.0_4dd65761f9c0507412935423bccd866f911519c5.jar" />
+    </item>
+    <item
+        jar="/Users/brandon/AndroidStudioProjects/JustJava/app/build/intermediates/incremental-classes/debug/instant-run-bootstrap.jar"
+        jumboMode="true"
+        revision="23.0.3"
+        sha1="6f0cd47dc94671fdd8454eeddb1992ad18863929">
+        <dex dex="/Users/brandon/AndroidStudioProjects/JustJava/app/build/intermediates/pre-dexed/debug/instant-run-bootstrap_a872933f1d606ce1b5ca417ee7f4e4603138ce65.jar" />
+    </item>
+    <item
+        jar="/Users/brandon/AndroidStudioProjects/JustJava/app/build/intermediates/exploded-aar/com.android.support/animated-vector-drawable/23.4.0/jars/classes.jar"
+        jumboMode="true"
+        revision="23.0.3"
+        sha1="de4db3785756bfb0915a9f59a9b3f2fea7407be4">
+        <dex dex="/Users/brandon/AndroidStudioProjects/JustJava/app/build/intermediates/pre-dexed/debug/com.android.support-animated-vector-drawable-23.4.0_cdf1bab17bc2f401cb5533466989779b51d2062a.jar" />
+    </item>
+    <item
+        jar="/Users/brandon/AndroidStudioProjects/JustJava/app/build/intermediates/exploded-aar/com.android.support/support-v4/23.4.0/jars/classes.jar"
+        jumboMode="true"
+        revision="23.0.3"
+        sha1="67bd36ee9340ec7c254108936ad16b24bed160cc">
+        <dex dex="/Users/brandon/AndroidStudioProjects/JustJava/app/build/intermediates/pre-dexed/debug/com.android.support-support-v4-23.4.0_eaa81294f05cf3ef644cce930a27321d8414e9fd.jar" />
+    </item>
+
+</items>

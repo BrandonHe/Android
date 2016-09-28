@@ -1,0 +1,38 @@
+[
+    {
+        "outputFile": "/Users/brandon/AndroidStudioProjects/JustJava/app/build/intermediates/res/merged/debug/values-zh/values-zh.xml",
+        "map": [
+            {
+                "to": {
+                    "startLine": 2,
+                    "startColumn": 4,
+                    "startOffset": 55,
+                    "endColumn": 41,
+                    "endOffset": 92
+                },
+                "from": {
+                    "file": "/Users/brandon/AndroidStudioProjects/JustJava/app/src/main/res/values-zh/strings.xml",
+                    "position": {
+                        "startLine": 3,
+                        "startColumn": 4,
+                        "startOffset": 102,
+                        "endColumn": 41,
+                        "endOffset": 139
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 3,
+                    "startColumn": 4,
+                    "startOffset": 97,
+                    "endColumn": 46,
+                    "endOffset": 139
+                },
+                "from": {
+                    "file": "/Users/brandon/AndroidStudioProjects/JustJava/app/src/main/res/values-zh/strings.xml"
+                }
+            }
+        ]
+    }
+]

@@ -1,0 +1,33 @@
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <string name="app_name">Just Java</string>
+
+    <!-- Hint text display in the empty field for the user's name [CHAR LIMIT = 20] -->
+    <string name="name">name</string>
+
+    <!-- Hint text display in the empty field for toppings [CHAR LIMIT = 20] -->
+    <string name="toppings">Toppings</string>>
+
+    <!-- Hint text display in the empty field for whipped cream [CHAR LIMIT = 20] -->
+    <string name="whipped_cream">Whipped Cream</string>
+
+    <!-- Hint text display in the empty field for chocolate [CHAR LIMIT = 20] -->
+    <string name="chocolate">Chocolate</string>
+
+    <!-- Hint text display in the empty field for quantity [CHAR LIMIT = 20] -->
+    <string name="quantity">Quantity</string>
+
+    <!-- Hint text display in the empty field for order summary [CHAR LIMIT = 20] -->
+    <string name="order_summary">Order Summary</string>
+
+    <!-- Hint text display in the empty field for order [CHAR LIMIT = 20] -->
+    <string name="order">Order</string>
+
+    <!-- Hint text display in the empty field for thank you -->
+    <string name="thank_you">Thank you!</string>
+
+    <!--
+        Name for the order summary, it will be shown in the format of "Name: Army ", where
+        Army is the user name. [CHAR LIMIT = NONE]
+    -->
+    <string name="order_summary_name">Name: <xliff:g id="name" example="Army">%s</xliff:g></string>
+</resources>
