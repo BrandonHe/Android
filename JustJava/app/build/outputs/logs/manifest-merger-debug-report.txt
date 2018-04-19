@@ -1,8 +1,6 @@
 -- Merging decision tree log ---
 manifest
 ADDED from /Users/brandon/AndroidStudioProjects/JustJava/app/src/main/AndroidManifest.xml:2:1-20:12
-	xmlns:android
-		ADDED from /Users/brandon/AndroidStudioProjects/JustJava/app/src/main/AndroidManifest.xml:2:11-69
 	package
 		ADDED from /Users/brandon/AndroidStudioProjects/JustJava/app/src/main/AndroidManifest.xml:3:5-43
 		INJECTED from /Users/brandon/AndroidStudioProjects/JustJava/app/src/main/AndroidManifest.xml
@@ -10,22 +8,21 @@ ADDED from /Users/brandon/AndroidStudioProjects/JustJava/app/src/main/AndroidMan
 	android:versionName
 		INJECTED from /Users/brandon/AndroidStudioProjects/JustJava/app/src/main/AndroidManifest.xml
 		INJECTED from /Users/brandon/AndroidStudioProjects/JustJava/app/src/main/AndroidManifest.xml
+	xmlns:android
+		ADDED from /Users/brandon/AndroidStudioProjects/JustJava/app/src/main/AndroidManifest.xml:2:11-69
 	android:versionCode
 		INJECTED from /Users/brandon/AndroidStudioProjects/JustJava/app/src/main/AndroidManifest.xml
 		INJECTED from /Users/brandon/AndroidStudioProjects/JustJava/app/src/main/AndroidManifest.xml
 application
 ADDED from /Users/brandon/AndroidStudioProjects/JustJava/app/src/main/AndroidManifest.xml:5:5-18:19
-MERGED from [com.android.support:appcompat-v7:23.4.0] /Users/brandon/AndroidStudioProjects/JustJava/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.4.0/AndroidManifest.xml:25:5-20
-MERGED from [com.android.support:animated-vector-drawable:23.4.0] /Users/brandon/AndroidStudioProjects/JustJava/app/build/intermediates/exploded-aar/com.android.support/animated-vector-drawable/23.4.0/AndroidManifest.xml:7:5-20
-MERGED from [com.android.support:support-vector-drawable:23.4.0] /Users/brandon/AndroidStudioProjects/JustJava/app/build/intermediates/exploded-aar/com.android.support/support-vector-drawable/23.4.0/AndroidManifest.xml:7:5-20
-MERGED from [com.android.support:support-v4:23.4.0] /Users/brandon/AndroidStudioProjects/JustJava/app/build/intermediates/exploded-aar/com.android.support/support-v4/23.4.0/AndroidManifest.xml:22:5-20
-MERGED from [com.android.support:support-v4:23.4.0] /Users/brandon/AndroidStudioProjects/JustJava/app/build/intermediates/exploded-aar/com.android.support/support-v4/23.4.0/AndroidManifest.xml:22:5-20
-MERGED from [com.android.support:support-vector-drawable:23.4.0] /Users/brandon/AndroidStudioProjects/JustJava/app/build/intermediates/exploded-aar/com.android.support/support-vector-drawable/23.4.0/AndroidManifest.xml:7:5-20
-MERGED from [com.android.support:support-v4:23.4.0] /Users/brandon/AndroidStudioProjects/JustJava/app/build/intermediates/exploded-aar/com.android.support/support-v4/23.4.0/AndroidManifest.xml:22:5-20
-	android:supportsRtl
-		ADDED from /Users/brandon/AndroidStudioProjects/JustJava/app/src/main/AndroidManifest.xml:9:9-35
+MERGED from [com.android.support:appcompat-v7:23.4.0] /Users/brandon/.android/build-cache/6cb9bd3df6b61bfe94744f77e27fc40ba34b740b/output/AndroidManifest.xml:25:5-20
+MERGED from [com.android.support:animated-vector-drawable:23.4.0] /Users/brandon/.android/build-cache/ad99410c527b67c8c97479266b346e65f5e91990/output/AndroidManifest.xml:7:5-20
+MERGED from [com.android.support:support-vector-drawable:23.4.0] /Users/brandon/.android/build-cache/3e1b3b4430ffd856efcab6a9bf0101caaf164271/output/AndroidManifest.xml:7:5-20
+MERGED from [com.android.support:support-v4:23.4.0] /Users/brandon/.android/build-cache/fad68cfeb25071c87c40b9b9b0fbc5a4d0886686/output/AndroidManifest.xml:22:5-20
 	android:label
 		ADDED from /Users/brandon/AndroidStudioProjects/JustJava/app/src/main/AndroidManifest.xml:8:9-41
+	android:supportsRtl
+		ADDED from /Users/brandon/AndroidStudioProjects/JustJava/app/src/main/AndroidManifest.xml:9:9-35
 	android:allowBackup
 		ADDED from /Users/brandon/AndroidStudioProjects/JustJava/app/src/main/AndroidManifest.xml:6:9-35
 	android:icon
@@ -48,18 +45,15 @@ ADDED from /Users/brandon/AndroidStudioProjects/JustJava/app/src/main/AndroidMan
 		ADDED from /Users/brandon/AndroidStudioProjects/JustJava/app/src/main/AndroidManifest.xml:15:27-74
 uses-sdk
 INJECTED from /Users/brandon/AndroidStudioProjects/JustJava/app/src/main/AndroidManifest.xml reason: use-sdk injection requested
-MERGED from [com.android.support:appcompat-v7:23.4.0] /Users/brandon/AndroidStudioProjects/JustJava/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.4.0/AndroidManifest.xml:21:5-23:78
-MERGED from [com.android.support:animated-vector-drawable:23.4.0] /Users/brandon/AndroidStudioProjects/JustJava/app/build/intermediates/exploded-aar/com.android.support/animated-vector-drawable/23.4.0/AndroidManifest.xml:5:5-44
-MERGED from [com.android.support:support-vector-drawable:23.4.0] /Users/brandon/AndroidStudioProjects/JustJava/app/build/intermediates/exploded-aar/com.android.support/support-vector-drawable/23.4.0/AndroidManifest.xml:5:5-43
-MERGED from [com.android.support:support-v4:23.4.0] /Users/brandon/AndroidStudioProjects/JustJava/app/build/intermediates/exploded-aar/com.android.support/support-v4/23.4.0/AndroidManifest.xml:20:5-43
-MERGED from [com.android.support:support-v4:23.4.0] /Users/brandon/AndroidStudioProjects/JustJava/app/build/intermediates/exploded-aar/com.android.support/support-v4/23.4.0/AndroidManifest.xml:20:5-43
-MERGED from [com.android.support:support-vector-drawable:23.4.0] /Users/brandon/AndroidStudioProjects/JustJava/app/build/intermediates/exploded-aar/com.android.support/support-vector-drawable/23.4.0/AndroidManifest.xml:5:5-43
-MERGED from [com.android.support:support-v4:23.4.0] /Users/brandon/AndroidStudioProjects/JustJava/app/build/intermediates/exploded-aar/com.android.support/support-v4/23.4.0/AndroidManifest.xml:20:5-43
+MERGED from [com.android.support:appcompat-v7:23.4.0] /Users/brandon/.android/build-cache/6cb9bd3df6b61bfe94744f77e27fc40ba34b740b/output/AndroidManifest.xml:21:5-23:78
+MERGED from [com.android.support:animated-vector-drawable:23.4.0] /Users/brandon/.android/build-cache/ad99410c527b67c8c97479266b346e65f5e91990/output/AndroidManifest.xml:5:5-44
+MERGED from [com.android.support:support-vector-drawable:23.4.0] /Users/brandon/.android/build-cache/3e1b3b4430ffd856efcab6a9bf0101caaf164271/output/AndroidManifest.xml:5:5-43
+MERGED from [com.android.support:support-v4:23.4.0] /Users/brandon/.android/build-cache/fad68cfeb25071c87c40b9b9b0fbc5a4d0886686/output/AndroidManifest.xml:20:5-43
+	tools:overrideLibrary
+		ADDED from [com.android.support:appcompat-v7:23.4.0] /Users/brandon/.android/build-cache/6cb9bd3df6b61bfe94744f77e27fc40ba34b740b/output/AndroidManifest.xml:23:9-75
 	android:targetSdkVersion
 		INJECTED from /Users/brandon/AndroidStudioProjects/JustJava/app/src/main/AndroidManifest.xml
 		INJECTED from /Users/brandon/AndroidStudioProjects/JustJava/app/src/main/AndroidManifest.xml
 	android:minSdkVersion
 		INJECTED from /Users/brandon/AndroidStudioProjects/JustJava/app/src/main/AndroidManifest.xml
 		INJECTED from /Users/brandon/AndroidStudioProjects/JustJava/app/src/main/AndroidManifest.xml
-	tools:overrideLibrary
-		ADDED from [com.android.support:appcompat-v7:23.4.0] /Users/brandon/AndroidStudioProjects/JustJava/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.4.0/AndroidManifest.xml:23:9-75

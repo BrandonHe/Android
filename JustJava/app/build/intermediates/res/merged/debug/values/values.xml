@@ -1437,7 +1437,7 @@
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
     </style>
-    <style name="Theme.MyTheme" parent="android:Theme.Material">
+    <style name="Theme.MyTheme" parent="Theme.AppCompat.Light">
         <!-- Main theme colors -->
         <!-- your app branding color for the app bar -->
         <item name="colorPrimary">@color/colorPrimary</item>

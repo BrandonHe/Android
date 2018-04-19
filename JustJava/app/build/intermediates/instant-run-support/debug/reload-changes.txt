@@ -1,5 +1,0 @@
-CHANGED,/Users/brandon/AndroidStudioProjects/JustJava/app/build/intermediates/transforms/instantRun/debug/folders/4000/5/enhanced/com/example/brandon/justjava/R$override.class
-CHANGED,/Users/brandon/AndroidStudioProjects/JustJava/app/build/intermediates/transforms/instantRun/debug/folders/4000/5/enhanced/com/example/brandon/justjava/R$style$override.class
-CHANGED,/Users/brandon/AndroidStudioProjects/JustJava/app/build/intermediates/transforms/instantRun/debug/folders/4000/5/enhanced/android/support/v7/appcompat/R$style$override.class
-CHANGED,/Users/brandon/AndroidStudioProjects/JustJava/app/build/intermediates/transforms/instantRun/debug/folders/4000/5/enhanced/com/android/tools/fd/runtime/AppPatchesLoaderImpl.class
-CHANGED,/Users/brandon/AndroidStudioProjects/JustJava/app/build/intermediates/transforms/instantRun/debug/folders/4000/5/enhanced/com/example/brandon/justjava/R$styleable$override.class
