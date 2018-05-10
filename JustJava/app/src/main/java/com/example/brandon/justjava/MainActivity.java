@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.SystemClock;
-import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
@@ -12,6 +11,11 @@ import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.example.brandon.justjava.sdl.BuildConfig;
+import com.example.brandon.justjava.sdl.R;
+import com.example.brandon.justjava.sdl.SdlReceiver;
+import com.example.brandon.justjava.sdl.SdlService;
 
 import java.security.cert.Certificate;
 import java.text.NumberFormat;
@@ -26,6 +30,14 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        //If we are connected to a module we want to start our SdlService
+        if(BuildConfig.TRANSPORT.equals("MBT")) {
+            SdlReceiver.queryForConnectedService(this);
+        }else if(BuildConfig.TRANSPORT.equals("TCP") || BuildConfig.TRANSPORT.equals("LBT")) {
+            Intent proxyIntent = new Intent(this, SdlService.class);
+            startService(proxyIntent);
+        }
     }
 
     //Global variable to show the coffee quantities

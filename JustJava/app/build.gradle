@@ -1,13 +1,13 @@
 apply plugin: 'com.android.application'
 
 android {
-    compileSdkVersion 25
-    buildToolsVersion '25.0.0'
+    compileSdkVersion 26
+    buildToolsVersion '27.0.3'
 
     defaultConfig {
         applicationId "com.example.brandon.justjava"
-        minSdkVersion 15
-        targetSdkVersion 23
+        minSdkVersion 19
+        targetSdkVersion 26
         versionCode 1
         versionName "1.0"
     }
@@ -17,9 +17,50 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+    flavorDimensions "default"
+    productFlavors{
+        mbt_high {
+            buildConfigField 'String', 'TRANSPORT', '"MBT"'
+            buildConfigField 'String', 'SECURITY', '"HIGH"'
+        }
+        mbt_med {
+            buildConfigField 'String', 'TRANSPORT', '"MBT"'
+            buildConfigField 'String', 'SECURITY', '"MED"'
+        }
+        mbt_low {
+            buildConfigField 'String', 'TRANSPORT', '"MBT"'
+            buildConfigField 'String', 'SECURITY', '"LOW"'
+        }
+        mbt_off {
+            buildConfigField 'String', 'TRANSPORT', '"MBT"'
+            buildConfigField 'String', 'SECURITY', '"OFF"'
+        }
+        lbt {
+            buildConfigField 'String', 'TRANSPORT', '"LBT"'
+            buildConfigField 'String', 'SECURITY', '"OFF"'
+        }
+        tcp {
+            buildConfigField 'String', 'TRANSPORT', '"TCP"'
+            buildConfigField 'String', 'SECURITY', '"OFF"'
+        }
+        usb {
+            buildConfigField 'String', 'TRANSPORT', '"USB"'
+            buildConfigField 'String', 'SECURITY', '"OFF"'
+        }
+    }
+}
+
+repositories {
+    flatDir {
+        dirs 'libs'
+    }
 }
 
 dependencies {
-    compile fileTree(dir: 'libs', include: ['*.jar'])
-    compile 'com.android.support:appcompat-v7:23.4.0'
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    implementation 'com.android.support:appcompat-v7:26.1.0'
+    implementation 'com.smartdevicelink:sdl_android:4.5.0'
+
+    implementation(name: 'applink_security_lib', ext:'aar')
+    //implementation(name: 'sdl_android_lib', ext:'aar')
 }

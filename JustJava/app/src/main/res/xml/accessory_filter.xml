@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<resources>
+	<!-- The value here must match those in the USBTransport class to work
+	property -->
+	<usb-accessory
+		manufacture="SDL"
+		model="core"
+		version="1.0"/>
+</resources>
