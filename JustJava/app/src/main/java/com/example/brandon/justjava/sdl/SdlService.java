@@ -154,6 +154,9 @@ public class SdlService extends Service implements IProxyListenerALM{
 	private SdlProxyALM proxy = null;
 
 	private boolean firstNonHmiNone = true;
+
+	private boolean statusHMIFull = true;	// Add by Brandon
+
 	@SuppressWarnings("unused")
 	private boolean isVehicleDataSubscribed = false;
 
@@ -330,7 +333,7 @@ public class SdlService extends Service implements IProxyListenerALM{
 			softButtons.add(yesButton);
 			softButtons.add(cancelButton);
 			// Soft buttons
-			alert.setSoftButtons(softButtons);    //softButtons populated elsewhere
+			//alert.setSoftButtons(softButtons);    //softButtons populated elsewhere
 
 			// Send alert
 			proxy.sendRPCRequest(alert);
@@ -464,9 +467,18 @@ public class SdlService extends Service implements IProxyListenerALM{
 			if (notification.getFirstRun()) {
 				// send welcome message if applicable
 				performWelcomeMessage();
+
+				showAlert("alertText LineA", "alertText lineB", "alertText LineC");
+
 			}
 			// Other HMI (Show, PerformInteraction, etc.) would go here
-			showAlert("alertText line1", "alertText line2", "alertText Line3");
+
+			// TODO: The performAudioPassThru() will be executed always in this HMI_FULL logic
+			if(statusHMIFull) {
+				getInCarAudio();
+				statusHMIFull = !statusHMIFull;
+			}
+
 		}
 
 		if(!notification.getHmiLevel().equals(HMILevel.HMI_NONE)
@@ -474,6 +486,7 @@ public class SdlService extends Service implements IProxyListenerALM{
 			sendCommands();
 			//uploadImages();
 			firstNonHmiNone = false;
+			statusHMIFull = true;
 			
 			// Other app setup (SubMenu, CreateChoiceSet, etc.) would go here
 		}else{
