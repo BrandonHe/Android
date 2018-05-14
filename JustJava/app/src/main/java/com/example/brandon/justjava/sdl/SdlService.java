@@ -17,12 +17,14 @@ import com.smartdevicelink.proxy.LockScreenManager;
 import com.smartdevicelink.proxy.RPCRequest;
 import com.smartdevicelink.proxy.RPCResponse;
 import com.smartdevicelink.proxy.SdlProxyALM;
+import com.smartdevicelink.proxy.TTSChunkFactory;
 import com.smartdevicelink.proxy.callbacks.OnServiceEnded;
 import com.smartdevicelink.proxy.callbacks.OnServiceNACKed;
 import com.smartdevicelink.proxy.interfaces.IProxyListenerALM;
 import com.smartdevicelink.proxy.rpc.AddCommand;
 import com.smartdevicelink.proxy.rpc.AddCommandResponse;
 import com.smartdevicelink.proxy.rpc.AddSubMenuResponse;
+import com.smartdevicelink.proxy.rpc.Alert;
 import com.smartdevicelink.proxy.rpc.AlertManeuverResponse;
 import com.smartdevicelink.proxy.rpc.AlertResponse;
 import com.smartdevicelink.proxy.rpc.ButtonPressResponse;
@@ -63,6 +65,7 @@ import com.smartdevicelink.proxy.rpc.OnTBTClientState;
 import com.smartdevicelink.proxy.rpc.OnTouchEvent;
 import com.smartdevicelink.proxy.rpc.OnVehicleData;
 import com.smartdevicelink.proxy.rpc.OnWayPointChange;
+import com.smartdevicelink.proxy.rpc.PerformAudioPassThru;
 import com.smartdevicelink.proxy.rpc.PerformAudioPassThruResponse;
 import com.smartdevicelink.proxy.rpc.PerformInteractionResponse;
 import com.smartdevicelink.proxy.rpc.PutFile;
@@ -80,6 +83,7 @@ import com.smartdevicelink.proxy.rpc.SetMediaClockTimerResponse;
 import com.smartdevicelink.proxy.rpc.ShowConstantTbtResponse;
 import com.smartdevicelink.proxy.rpc.ShowResponse;
 import com.smartdevicelink.proxy.rpc.SliderResponse;
+import com.smartdevicelink.proxy.rpc.SoftButton;
 import com.smartdevicelink.proxy.rpc.SpeakResponse;
 import com.smartdevicelink.proxy.rpc.StreamRPCResponse;
 import com.smartdevicelink.proxy.rpc.SubscribeButtonResponse;
@@ -90,12 +94,16 @@ import com.smartdevicelink.proxy.rpc.UnsubscribeButtonResponse;
 import com.smartdevicelink.proxy.rpc.UnsubscribeVehicleDataResponse;
 import com.smartdevicelink.proxy.rpc.UnsubscribeWayPointsResponse;
 import com.smartdevicelink.proxy.rpc.UpdateTurnListResponse;
+import com.smartdevicelink.proxy.rpc.enums.AudioType;
+import com.smartdevicelink.proxy.rpc.enums.BitsPerSample;
 import com.smartdevicelink.proxy.rpc.enums.FileType;
 import com.smartdevicelink.proxy.rpc.enums.HMILevel;
 import com.smartdevicelink.proxy.rpc.enums.ImageType;
 import com.smartdevicelink.proxy.rpc.enums.LockScreenStatus;
 import com.smartdevicelink.proxy.rpc.enums.RequestType;
+import com.smartdevicelink.proxy.rpc.enums.SamplingRate;
 import com.smartdevicelink.proxy.rpc.enums.SdlDisconnectedReason;
+import com.smartdevicelink.proxy.rpc.enums.SoftButtonType;
 import com.smartdevicelink.proxy.rpc.enums.TextAlignment;
 import com.smartdevicelink.proxy.rpc.listeners.OnRPCResponseListener;
 import com.smartdevicelink.transport.BTTransportConfig;
@@ -112,6 +120,7 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Vector;
 
 public class SdlService extends Service implements IProxyListenerALM{
 
@@ -120,8 +129,9 @@ public class SdlService extends Service implements IProxyListenerALM{
 	private static final String APP_NAME 				= "Just Java ";
 	private static final String APP_ID 					= "8675309";
 	
-	private static final String ICON_FILENAME 			= "hello_sdl_icon.png";
+	private static final String ICON_FILENAME 			= "just_java_icon.png";
 	private static final String SDL_IMAGE_FILENAME  	= "sdl_full_image.png";
+	private static final String AUTHER					= "Shu liang He";
 	private int iconCorrelationId;
 
 	private List<String> remoteFiles;
@@ -129,7 +139,7 @@ public class SdlService extends Service implements IProxyListenerALM{
 	private static final String WELCOME_SHOW 			= "Welcome to JustJava";
 	private static final String WELCOME_SPEAK 			= "Welcome to Just Java";
 	
-	private static final String TEST_COMMAND_NAME 		= "Test Command";
+	private static final String TEST_COMMAND_NAME 		= "JustJava Command";
 	private static final int TEST_COMMAND_ID 			= 1;
 
 	private static final int FOREGROUND_SERVICE_ID = 111;
@@ -272,7 +282,63 @@ public class SdlService extends Service implements IProxyListenerALM{
 			e.printStackTrace();
 		}
 	}
-	
+
+	/**
+	 * Show alert message to the screen
+	 * @param alertText1
+	 * @param alertText2
+	 * @param alertText3
+	 */
+	private void showAlert(String alertText1, String alertText2, String alertText3) {
+		try {
+			Alert alert = new Alert();
+			alert.setAlertText1(alertText1);
+			alert.setAlertText2(alertText2);
+			alert.setAlertText3(alertText3);
+
+			// Maximum time alert appears before being dismissed
+			// Timeouts are must between 3-10 seconds
+			// Timeouts may not work when soft buttons are also used in the alert
+			alert.setDuration(5000);
+
+			// A progress indicator (e.g. spinning wheel or hourglass)
+			alert.setProgressIndicator(true);
+
+			// Text to speech
+			//alert.setTtsChunks(TTS_list);	// TTS_list populated elsewhere
+
+			// Special tone played before the tts is spoken
+			alert.setPlayTone(true);
+
+
+			Image cancelImage = new Image();
+			cancelImage.setImageType(ImageType.DYNAMIC);
+			cancelImage.setValue("cancel.jpeg");
+
+			Vector<SoftButton> softButtons = new Vector<>();
+
+			SoftButton yesButton = new SoftButton();
+			yesButton.setType(SoftButtonType.SBT_TEXT);
+			yesButton.setText("OK");
+			yesButton.setSoftButtonID(0);
+
+			SoftButton cancelButton = new SoftButton();
+			cancelButton.setType((SoftButtonType.SBT_IMAGE));
+			cancelButton.setImage(cancelImage);
+			cancelButton.setSoftButtonID(1);
+
+			softButtons.add(yesButton);
+			softButtons.add(cancelButton);
+			// Soft buttons
+			alert.setSoftButtons(softButtons);    //softButtons populated elsewhere
+
+			// Send alert
+			proxy.sendRPCRequest(alert);
+		} catch (SdlException e) {
+			e.printStackTrace();
+		}
+	}
+
 	/**
 	 *  Add commands for the app on SDL.
 	 */
@@ -284,6 +350,26 @@ public class SdlService extends Service implements IProxyListenerALM{
 		command.setMenuParams(params);
 		command.setVrCommands(Collections.singletonList(TEST_COMMAND_NAME));
 		sendRpcRequest(command);
+	}
+
+	/**
+	 *  Getting in car audio to interact with users via raw audio data provided to them from
+	 *  the car's microphones.
+	 */
+	private void getInCarAudio() {
+		PerformAudioPassThru performAPT = new PerformAudioPassThru();
+		performAPT.setAudioPassThruDisplayText1("Ask me \"Book a cup of Coffee\"");
+		performAPT.setAudioPassThruDisplayText2(" with \"Chocolate \" or \"Whipped Cream.\"");
+
+		performAPT.setInitialPrompt(TTSChunkFactory
+				.createSimpleTTSChunks("Book a cup of Coffee with Chocolate and Whipped Cream."));
+		performAPT.setSamplingRate(SamplingRate._22KHZ);
+		performAPT.setMaxDuration(5000);
+		performAPT.setBitsPerSample(BitsPerSample._16_BIT);
+		performAPT.setAudioType(AudioType.PCM);
+		performAPT.setMuteAudio(false);
+
+		sendRpcRequest(performAPT);
 	}
 
 	/**
@@ -316,6 +402,8 @@ public class SdlService extends Service implements IProxyListenerALM{
 	private void uploadImage(int resource, String imageName, int correlationId, boolean isPersistent){
 		PutFile putFile = new PutFile();
 		putFile.setFileType(FileType.GRAPHIC_PNG);
+		putFile.setFileType(FileType.GRAPHIC_JPEG);
+		putFile.setFileType(FileType.GRAPHIC_BMP);
 		putFile.setSdlFileName(imageName);
 		putFile.setCorrelationID(correlationId);
 		putFile.setPersistentFile(isPersistent);
@@ -378,6 +466,7 @@ public class SdlService extends Service implements IProxyListenerALM{
 				performWelcomeMessage();
 			}
 			// Other HMI (Show, PerformInteraction, etc.) would go here
+			showAlert("alertText line1", "alertText line2", "alertText Line3");
 		}
 
 		if(!notification.getHmiLevel().equals(HMILevel.HMI_NONE)
@@ -423,6 +512,27 @@ public class SdlService extends Service implements IProxyListenerALM{
 			image.setValue(SDL_IMAGE_FILENAME);
 			image.setImageType(ImageType.DYNAMIC);
 
+			/*
+			Image cancelImage = new Image();
+			cancelImage.setImageType(ImageType.DYNAMIC);
+			image.setValue("cancel.jpeg");
+
+			Vector<SoftButton> softButtons = new Vector<>();
+
+			SoftButton yesButton = new SoftButton();
+			yesButton.setType(SoftButtonType.SBT_TEXT);
+			yesButton.setText("OK");
+			yesButton.setSoftButtonID(0);
+
+			SoftButton cancelButton = new SoftButton();
+			cancelButton.setType((SoftButtonType.SBT_IMAGE));
+			cancelButton.setImage(cancelImage);
+			cancelButton.setSoftButtonID(1);
+
+			softButtons.add(yesButton);
+			softButtons.add(cancelButton);
+			*/
+
 			//Set the welcome message on screen
 			proxy.show(APP_NAME, WELCOME_SHOW, null, null, null, null, null, image, null, null, TextAlignment.CENTERED, CorrelationIdGenerator.generateId());
 			
@@ -463,16 +573,17 @@ public class SdlService extends Service implements IProxyListenerALM{
 				// Check the mutable set for the SDL image
 				// If not present, upload the image
 				if(remoteFiles== null || !remoteFiles.contains(SdlService.SDL_IMAGE_FILENAME)){
-					uploadImage(R.drawable.sdl, SDL_IMAGE_FILENAME, CorrelationIdGenerator.generateId(), true);
+					uploadImage(R.drawable.coffee_mug, SDL_IMAGE_FILENAME, CorrelationIdGenerator.generateId(), true);
 				}
 			}
 		});
 		this.sendRpcRequest(listFiles);
 	}
 
+
 	@Override
 	public void onListFilesResponse(ListFilesResponse response) {
-		Log.i(TAG, "onListFilesResponse from SDL ");
+		Log.i(TAG, "onListFilesResponse from SDL");
 	}
 
 	@Override
