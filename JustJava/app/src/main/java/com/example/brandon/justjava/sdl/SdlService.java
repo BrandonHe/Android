@@ -10,6 +10,7 @@ import android.hardware.usb.UsbAccessory;
 import android.hardware.usb.UsbManager;
 import android.os.Build;
 import android.os.IBinder;
+import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 
 import com.smartdevicelink.exception.SdlException;
@@ -36,6 +37,7 @@ import com.smartdevicelink.proxy.rpc.DeleteInteractionChoiceSetResponse;
 import com.smartdevicelink.proxy.rpc.DeleteSubMenuResponse;
 import com.smartdevicelink.proxy.rpc.DiagnosticMessageResponse;
 import com.smartdevicelink.proxy.rpc.DialNumberResponse;
+import com.smartdevicelink.proxy.rpc.DisplayCapabilities;
 import com.smartdevicelink.proxy.rpc.EndAudioPassThruResponse;
 import com.smartdevicelink.proxy.rpc.GenericResponse;
 import com.smartdevicelink.proxy.rpc.GetDTCsResponse;
@@ -76,10 +78,12 @@ import com.smartdevicelink.proxy.rpc.ScrollableMessageResponse;
 import com.smartdevicelink.proxy.rpc.SendHapticDataResponse;
 import com.smartdevicelink.proxy.rpc.SendLocationResponse;
 import com.smartdevicelink.proxy.rpc.SetAppIconResponse;
+import com.smartdevicelink.proxy.rpc.SetDisplayLayout;
 import com.smartdevicelink.proxy.rpc.SetDisplayLayoutResponse;
 import com.smartdevicelink.proxy.rpc.SetGlobalPropertiesResponse;
 import com.smartdevicelink.proxy.rpc.SetInteriorVehicleDataResponse;
 import com.smartdevicelink.proxy.rpc.SetMediaClockTimerResponse;
+import com.smartdevicelink.proxy.rpc.Show;
 import com.smartdevicelink.proxy.rpc.ShowConstantTbtResponse;
 import com.smartdevicelink.proxy.rpc.ShowResponse;
 import com.smartdevicelink.proxy.rpc.SliderResponse;
@@ -90,21 +94,27 @@ import com.smartdevicelink.proxy.rpc.SubscribeButtonResponse;
 import com.smartdevicelink.proxy.rpc.SubscribeVehicleDataResponse;
 import com.smartdevicelink.proxy.rpc.SubscribeWayPointsResponse;
 import com.smartdevicelink.proxy.rpc.SystemRequestResponse;
+import com.smartdevicelink.proxy.rpc.TextField;
 import com.smartdevicelink.proxy.rpc.UnsubscribeButtonResponse;
 import com.smartdevicelink.proxy.rpc.UnsubscribeVehicleDataResponse;
 import com.smartdevicelink.proxy.rpc.UnsubscribeWayPointsResponse;
 import com.smartdevicelink.proxy.rpc.UpdateTurnListResponse;
 import com.smartdevicelink.proxy.rpc.enums.AudioType;
 import com.smartdevicelink.proxy.rpc.enums.BitsPerSample;
+import com.smartdevicelink.proxy.rpc.enums.ButtonName;
+import com.smartdevicelink.proxy.rpc.enums.DisplayType;
 import com.smartdevicelink.proxy.rpc.enums.FileType;
 import com.smartdevicelink.proxy.rpc.enums.HMILevel;
 import com.smartdevicelink.proxy.rpc.enums.ImageType;
+import com.smartdevicelink.proxy.rpc.enums.Language;
 import com.smartdevicelink.proxy.rpc.enums.LockScreenStatus;
 import com.smartdevicelink.proxy.rpc.enums.RequestType;
 import com.smartdevicelink.proxy.rpc.enums.SamplingRate;
 import com.smartdevicelink.proxy.rpc.enums.SdlDisconnectedReason;
 import com.smartdevicelink.proxy.rpc.enums.SoftButtonType;
+import com.smartdevicelink.proxy.rpc.enums.SystemAction;
 import com.smartdevicelink.proxy.rpc.enums.TextAlignment;
+import com.smartdevicelink.proxy.rpc.enums.TextFieldName;
 import com.smartdevicelink.proxy.rpc.listeners.OnRPCResponseListener;
 import com.smartdevicelink.transport.BTTransportConfig;
 import com.smartdevicelink.transport.BaseTransportConfig;
@@ -120,6 +130,7 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Locale;
 import java.util.Vector;
 
 public class SdlService extends Service implements IProxyListenerALM{
@@ -133,6 +144,8 @@ public class SdlService extends Service implements IProxyListenerALM{
 	private static final String SDL_IMAGE_FILENAME  	= "sdl_full_image.png";
 	private static final String AUTHER					= "Shu liang He";
 	private int iconCorrelationId;
+	// variable used to increment correlation ID for every request sent to SDL
+	public int autoIncCorrId = 0;
 
 	private List<String> remoteFiles;
 	
@@ -143,6 +156,9 @@ public class SdlService extends Service implements IProxyListenerALM{
 	private static final int TEST_COMMAND_ID 			= 1;
 
 	private static final int FOREGROUND_SERVICE_ID = 111;
+	private static final int SHOW_INCREMENT_QUANTITY_ID = 101;
+	private static final int SHOW_DECREMENT_QUANTITY_ID = 102;
+	private static final int SHOW_ORDER_ID = 103;
 
 	// TCP/IP transport config
 	// The default port is 12345
@@ -152,10 +168,24 @@ public class SdlService extends Service implements IProxyListenerALM{
 
 	// variable to create and call functions of the SyncProxy
 	private SdlProxyALM proxy = null;
-
 	private boolean firstNonHmiNone = true;
-
 	private boolean statusHMIFull = true;	// Add by Brandon
+	private DisplayType mDisplayType = null; // Keeps track of the HMI display type
+	private boolean mGraphicsSupported = false;	// Keeps track of the graphics are supported on the display
+	private boolean	mDisplayLayoutSupported = false;
+	private int mNumberOfTextFields = 1;
+	private int mLengthOfTextFields = 40;
+	private ArrayList<TextField> mTextFields = null;	// Keeps track of the text fields supported
+
+
+	private Language mCurrentSdlLanguage = null;	// Stores the current language
+	private Language mCurrentHmiLanguage = null;	// Stores the current language of display
+	private static Language mRegisteredAppHmiLanguage = Language.EN_US; // Stores the language of the display used at AppInterface registering
+	private static Language mRegisteredAppSdlLanguage = Language.EN_US; // Stores the language used at AppInterface registering
+	private static Language mDesiredAppSdlLanguage = Language.EN_US; 	// Stores the language to be used for next AppInterface registering
+	private static Language mDesiredAppHmiLanguage = Language.EN_US;	// Stores the language of the display to be used for next AppInterface registering
+
+	private HMILevel currentHMILevel = HMILevel.HMI_NONE;
 
 	@SuppressWarnings("unused")
 	private boolean isVehicleDataSubscribed = false;
@@ -313,11 +343,6 @@ public class SdlService extends Service implements IProxyListenerALM{
 			// Special tone played before the tts is spoken
 			alert.setPlayTone(true);
 
-
-			Image cancelImage = new Image();
-			cancelImage.setImageType(ImageType.DYNAMIC);
-			cancelImage.setValue("cancel.jpeg");
-
 			Vector<SoftButton> softButtons = new Vector<>();
 
 			SoftButton yesButton = new SoftButton();
@@ -326,12 +351,12 @@ public class SdlService extends Service implements IProxyListenerALM{
 			yesButton.setSoftButtonID(0);
 
 			SoftButton cancelButton = new SoftButton();
-			cancelButton.setType((SoftButtonType.SBT_IMAGE));
-			cancelButton.setImage(cancelImage);
+			cancelButton.setType((SoftButtonType.SBT_TEXT));
 			cancelButton.setSoftButtonID(1);
 
 			softButtons.add(yesButton);
 			softButtons.add(cancelButton);
+
 			// Soft buttons
 			//alert.setSoftButtons(softButtons);    //softButtons populated elsewhere
 
@@ -463,37 +488,68 @@ public class SdlService extends Service implements IProxyListenerALM{
 
 	@Override
 	public void onOnHMIStatus(OnHMIStatus notification) {
-		if(notification.getHmiLevel().equals(HMILevel.HMI_FULL)){			
-			if (notification.getFirstRun()) {
-				// send welcome message if applicable
-				performWelcomeMessage();
+		currentHMILevel = notification.getHmiLevel();
 
-				showAlert("alertText LineA", "alertText lineB", "alertText LineC");
-
-			}
-			// Other HMI (Show, PerformInteraction, etc.) would go here
-
-			// TODO: The performAudioPassThru() will be executed always in this HMI_FULL logic
-			if(statusHMIFull) {
-				getInCarAudio();
-				statusHMIFull = !statusHMIFull;
-			}
-
+		switch (notification.getSystemContext()) {
+			case SYSCTXT_MAIN:
+				break;
+			case SYSCTXT_VRSESSION:
+				break;
+			case SYSCTXT_MENU:
+				break;
+			default:
+				return;
 		}
 
-		if(!notification.getHmiLevel().equals(HMILevel.HMI_NONE)
-				&& firstNonHmiNone){
-			sendCommands();
-			//uploadImages();
-			firstNonHmiNone = false;
-			statusHMIFull = true;
-			
-			// Other app setup (SubMenu, CreateChoiceSet, etc.) would go here
-		}else{
-			//We have HMI_NONE
-			if(notification.getFirstRun()){
-				uploadImages();
-			}
+		switch (notification.getAudioStreamingState()) {
+			case AUDIBLE:
+				// play audio if applicable
+				break;
+			case NOT_AUDIBLE:
+				// pause/stop/mute audio if applicable
+				break;
+			default:
+				return;
+		}
+		switch (currentHMILevel) {
+			case HMI_FULL:
+				Log.i(TAG, "HMI_FULL");
+				if (notification.getFirstRun()) {
+					// send welcome message if applicable
+					performWelcomeMessage();
+					sendCommands();
+					showAlert("alertText LineA", "alertText lineB", "alertText LineC");
+
+					// addCommands();
+					subscribeButtons();
+
+				}
+				// TODO: The performAudioPassThru() will be executed always in this HMI_FULL logic
+				if(statusHMIFull) {
+					getInCarAudio();
+					statusHMIFull = !statusHMIFull;
+				}
+				break;
+			case HMI_LIMITED:
+				Log.i(TAG, "HMI_LIMITED");
+				break;
+			case HMI_BACKGROUND:
+				Log.i(TAG, "HMI_BACKGROUND");
+				if(firstNonHmiNone) {
+					getSdlSettings();
+				}
+				break;
+			case HMI_NONE:
+				if(firstNonHmiNone) {
+					getSdlSettings();
+					firstNonHmiNone = false;
+					statusHMIFull = true;
+
+					// Other app setup (SubMenu, CreateChoiceSet, etc.) would go here
+				}
+				break;
+			default:
+				return;
 		}
 	}
 
@@ -525,26 +581,36 @@ public class SdlService extends Service implements IProxyListenerALM{
 			image.setValue(SDL_IMAGE_FILENAME);
 			image.setImageType(ImageType.DYNAMIC);
 
-			/*
-			Image cancelImage = new Image();
-			cancelImage.setImageType(ImageType.DYNAMIC);
-			image.setValue("cancel.jpeg");
-
 			Vector<SoftButton> softButtons = new Vector<>();
 
-			SoftButton yesButton = new SoftButton();
-			yesButton.setType(SoftButtonType.SBT_TEXT);
-			yesButton.setText("OK");
-			yesButton.setSoftButtonID(0);
+			SoftButton incQuantityButton = new SoftButton();
+			incQuantityButton.setType(SoftButtonType.SBT_TEXT);
+			incQuantityButton.setText("+");
+			incQuantityButton.setSoftButtonID(SHOW_INCREMENT_QUANTITY_ID);
+			incQuantityButton.setIsHighlighted(false);
+			incQuantityButton.setSystemAction(SystemAction.DEFAULT_ACTION);
 
-			SoftButton cancelButton = new SoftButton();
-			cancelButton.setType((SoftButtonType.SBT_IMAGE));
-			cancelButton.setImage(cancelImage);
-			cancelButton.setSoftButtonID(1);
+			SoftButton decQuantityButton = new SoftButton();
+			decQuantityButton.setType((SoftButtonType.SBT_TEXT));
+			decQuantityButton.setText("-");
+			decQuantityButton.setSoftButtonID(SHOW_DECREMENT_QUANTITY_ID);
+			decQuantityButton.setIsHighlighted(false);
+			decQuantityButton.setSystemAction(SystemAction.DEFAULT_ACTION);
 
-			softButtons.add(yesButton);
-			softButtons.add(cancelButton);
-			*/
+			SoftButton orderButton = new SoftButton();
+			orderButton.setType(SoftButtonType.SBT_TEXT);
+			orderButton.setText("Order");
+			orderButton.setSoftButtonID(SHOW_ORDER_ID);
+			orderButton.setIsHighlighted(false);
+			orderButton.setSystemAction(SystemAction.DEFAULT_ACTION);
+
+			softButtons.add(incQuantityButton);
+			softButtons.add(decQuantityButton);
+			softButtons.add(orderButton);
+
+			Show showSoftButton = new Show();
+			showSoftButton.setSoftButtons(softButtons);
+			proxy.sendRPCRequest(showSoftButton);
 
 			//Set the welcome message on screen
 			proxy.show(APP_NAME, WELCOME_SHOW, null, null, null, null, null, image, null, null, TextAlignment.CENTERED, CorrelationIdGenerator.generateId());
@@ -586,13 +652,119 @@ public class SdlService extends Service implements IProxyListenerALM{
 				// Check the mutable set for the SDL image
 				// If not present, upload the image
 				if(remoteFiles== null || !remoteFiles.contains(SdlService.SDL_IMAGE_FILENAME)){
-					uploadImage(R.drawable.coffee_mug, SDL_IMAGE_FILENAME, CorrelationIdGenerator.generateId(), true);
+					uploadImage(R.drawable.ford_bran, SDL_IMAGE_FILENAME, CorrelationIdGenerator.generateId(), true);
 				}
 			}
 		});
 		this.sendRpcRequest(listFiles);
 	}
 
+	private void subscribeButtons() {
+		try {
+			proxy.subscribeButton(ButtonName.PRESET_1,autoIncCorrId++);
+		} catch (SdlException e) {
+			e.printStackTrace();
+			Log.e(TAG, "Failed to subscribe to button \"PRESET_1\"", e);
+		}
+	}
+
+	private void getSdlFiles() {
+		ListFiles request = new ListFiles();
+		request.setCorrelationID(autoIncCorrId++);
+		try {
+			proxy.sendRPCRequest(request);
+		} catch (SdlException e) {
+			e.printStackTrace();
+		}
+	}
+
+	private void getSdlSettings() {
+		getSdlFiles();
+		try {
+			// Get the display capabilities
+			DisplayCapabilities displayCapabilities = proxy.getDisplayCapabilities();
+			if (displayCapabilities != null) {
+				mDisplayType = displayCapabilities.getDisplayType();
+
+				Boolean gSupport = displayCapabilities.getGraphicSupported();
+				// Gen 1.0 will return NULL instead of not supported.
+				if (gSupport != null) {
+					mGraphicsSupported = gSupport.booleanValue();
+				} else {
+					mGraphicsSupported = false;
+				}
+
+				if (displayCapabilities.getTextFields() != null)
+					mTextFields = new ArrayList<>(displayCapabilities.getTextFields());
+
+				ArrayList<String> templates = null;
+				if (displayCapabilities.getTemplatesAvailable() != null)
+					templates = new ArrayList<>(displayCapabilities.getTemplatesAvailable());
+
+
+				mDisplayLayoutSupported = false;
+				if (templates != null && templates.contains("NON-MEDIA")) {
+					mDisplayLayoutSupported = true;
+				}
+
+				if (mDisplayType == DisplayType.CID) {
+					mNumberOfTextFields = 2;
+				} else if (mDisplayType == DisplayType.GEN3_8_INCH) {
+					mNumberOfTextFields = 3;
+				} else if (mDisplayType == DisplayType.MFD3 ||
+						mDisplayType == DisplayType.MFD4 ||
+						mDisplayType == DisplayType.MFD5) {
+					mNumberOfTextFields = 2;
+				} else if (mDisplayType == DisplayType.NGN) {
+					mNumberOfTextFields = 1;
+				} else {
+					mNumberOfTextFields = 1;
+				}
+
+				if (mTextFields != null && mTextFields.size() > 0) {
+					for (TextField field : mTextFields) {
+						if (field.getName() == TextFieldName.mainField1) {
+							// TODO: Workaround needed for GEN3 show issues
+							if (mDisplayType == DisplayType.GEN3_8_INCH) {
+								mLengthOfTextFields = 42;
+							} else {
+								mLengthOfTextFields = field.getWidth();
+							}
+							Log.i(TAG, String.format(Locale.getDefault(), "MainField Length: %d", mLengthOfTextFields));
+						}
+					}
+				}
+			}
+		} catch (SdlException e) {
+			Log.e(TAG, "Failed to get display capabilities", e);
+		}
+
+		// Upload files if graphics supported
+		if (mGraphicsSupported) {
+			uploadImages();
+		}
+
+		/*try {
+			// Subscribe to speed, external temperature, and deviceStatus
+			mProxy.subscribevehicledata(, mAutoIncCorrId++);
+		}catch(SdlException e) {
+			DebugTool.logError("Failed to subscribe to vehicle data", e);
+		}*/
+
+
+		if (mDisplayLayoutSupported) {
+			SetDisplayLayout layoutRequest = new SetDisplayLayout();
+			layoutRequest.setDisplayLayout("NON-MEDIA");
+			layoutRequest.setCorrelationID(autoIncCorrId++);
+			try {
+				proxy.sendRPCRequest(layoutRequest);
+			} catch (SdlException e) {
+				e.printStackTrace();
+			}
+		}
+
+		firstNonHmiNone = false;
+	}
 
 	@Override
 	public void onListFilesResponse(ListFilesResponse response) {
